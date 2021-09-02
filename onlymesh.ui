@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OnlyMesh</class>
+ <widget class="QWidget" name="OnlyMesh">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1366</width>
+    <height>630</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QLabel {
+background-color: none;
+color: #FFF;
+font: 16px &quot;Open Sans&quot;
+}
+
+/* ========================&gt; SLIDERS*/
+QSlider {
+background-color: none;
+color: #FFF;
+font: 16px &quot;Open Sans&quot;
+}
+QSlider::groove:horizontal {
+    border: 2px solid rgb(127, 141, 186);
+	border-radius: 8px;
+    height:8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+    background: rgb(69, 77, 102);
+    margin: 2px 0;
+	padding:2px;
+}
+QSlider::handle:horizontal {
+    background: rgb(93, 103, 136);
+    border: 2px solid rgb(85, 170, 255);
+	border-radius: 6px;
+    width: 8px;
+    margin: -2px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+}
+QSlider::handle:horizontal:hover {
+	border-color:rgb(85, 170, 255);
+	background-color: rgb(0, 0, 0, 80);	
+}
+
+QSlider::handle:horizontal:pressed {
+	border-color:rgb(255, 170, 0);
+	background-color: rgb(0, 0, 0, 80);
+}
+
+/* ========================&gt; PUSH BUTTONS*/
+QPushButton{
+border-width: 2px;
+border-style: solid;
+border-color: rgb(127, 141, 186);
+border-radius: 18px;
+color: #FFF;
+background-color:rgb(0, 0, 0, 80);
+padding-left: 20px;
+padding-right: 20px;
+padding-top: 5px;
+padding-bottom: 5px;
+font: 16px &quot;Open Sans&quot;
+}
+QPushButton:hover{
+border-color:rgb(85, 170, 255);
+background-color: rgb(0, 0, 0, 120);
+}
+
+QPushButton:pressed{
+border-color:rgb(255, 170, 0);
+background-color: rgb(0, 0, 0, 150);
+}
+
+QPushButton:disabled{
+color: rgb(132, 132, 132);
+background-color: rgb(0, 0, 0, 180);
+}
+
+
+/* ========================&gt; TABS*/
+QTabWidget {
+background-color: rgba(0,0,0,80);
+color: #FFF;
+font: &quot;Open Sans&quot;;  
+}
+QTabWidget::pane { /* The tab widget frame */
+    border: 2px solid rgb(127, 141, 186);
+	border-radius: 15px;
+	background-color:  rgba(0,0,0,80);
+	font: &quot;Open Sans&quot;;
+}
+
+QTabWidget::tab-bar {
+    left: 20px; /* move to the right by 5px */
+	font: &quot;Open Sans&quot;;
+}
+
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget  Son las pestanas Pose, Animation, Shape*/
+QTabBar::tab {
+    border: 2px solid rgb(127, 141, 186);
+    border-bottom-color:  rgb(127, 141, 186); /* same as the pane color */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    min-width: 8ex;
+    padding: 2px;
+	padding-bottom: -3px;
+	font:14px &quot;Open Sans&quot;;
+	color: #FFF;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: rgba(0, 0, 0, 170);
+}
+
+QTabBar::tab:selected {
+    border-color: #FFF;
+    border-bottom-color:rgb(85, 170, 255); /* same as pane color */
+	/* make use of negative margins for overlapping tabs */
+	/* expand/overlap to the left and right by 4px */
+	margin-left: -4px;
+    margin-right: -4px;
+	font-size:18px;
+}
+
+QTabBar::tab:!selected {
+	background: rgba(0, 0, 0, 100);
+    margin-top: 6 px; /* make non-selected tabs look smaller */
+	font-size:16px
+}
+
+QTabBar::tab:first:selected {
+    margin-left: 0; /* the first selected tab has nothing to overlap with on the left */
+}
+
+QTabBar::tab:last:selected {
+    margin-right: 0; /* the last selected tab has nothing to overlap with on the right */
+}
+
+QTabBar::tab:only-one {
+    margin: 0; /* if there is only one tab, we don't want overlapping margins */
+}
+
+
+/* ========================&gt; COMBO BOXES*/
+QComboBox {
+    border: 2px solid rgb(127, 141, 186);
+    border-radius: 13px;
+    padding: 1px 18px 1px 7px;
+    min-width: 6em;
+	background-color: rgba(0, 0, 0, 100); 
+	color: #FFF;
+	font: 14px &quot;Open Sans&quot;
+}
+QComboBox:on { /* shift the text when the popup opens */
+    padding-top: 3px;
+    padding-left: 6px;
+	border-color:rgb(85, 170, 255);
+    background-color:rgba(0, 0, 0,130);
+	color: #FFF;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border-left-width: 0px;
+    border-left-color: rgb(85, 170, 255);
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+	color: #FFF;
+	font: 12px &quot;Open Sans&quot;
+}
+
+QComboBox::down-arrow {
+    image: url(&quot;images/down-arrow.png&quot;);
+	padding-right: 3px;
+}
+
+/* shift the arrow when popup is open */
+QComboBox::down-arrow:on { 
+    image: url(&quot;images/up-arrow.png&quot;); 
+   
+}
+
+/*Con esto seteo el fondo y la letra de las opciones que se despliegan*/
+QComboBox QAbstractItemView {
+    border: 2px solid  rgb(85, 170, 255);
+    selection-background-color: rgb(0, 132, 198);	
+	background-color: rgba(0, 0, 0,70 );
+	color: #FFF;
+}
+
+/* Sets up scrollbar size, border, color */
+QScrollBar:vertical {
+border: 1px solid rgb(127, 141, 186);
+border-radius: 5px;
+background: black;
+width: 12px;
+/* margin sets up how far the handle can travel*/
+
+margin-left: 0px;
+margin-right: 2px;
+margin-top: 2px;
+margin-bottom: 2px;
+/*margin: 0px 0px 0px 0px;*/
+}
+
+/* Sets up the color and height of handle */
+QScrollBar::handle:vertical {
+border: 1px rgb(85, 170, 255);
+border-radius: 4px;
+width:10px;
+background: rgb(127, 141, 186);
+min-height: 48px;
+}
+
+QScrollBar::handle:vertical:pressed {
+	background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 170, 255, 255), stop:1 rgba(0, 255, 255, 255));
+}
+
+/* This remvoes the bottom button by setting the height to 0px */
+QScrollBar::add-line:vertical {
+height: 0px;
+subcontrol-position: bottom;
+subcontrol-origin: margin;
+}
+
+/* This remvoes the top button by setting the height to 0px */
+QScrollBar::sub-line:vertical {
+height: 0px;
+subcontrol-position: top;
+subcontrol-origin: margin;
+}
+
+/* need this to get rid of crosshatching on scrollbar background */
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+background: none;
+}
+
+
+
+
+
+
+/* ========================&gt; CHECK BOXES*/
+
+QCheckBox{
+	background-color: none;
+	color: #FFF;
+	font: 12px &quot;Open Sans&quot;
+}
+</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
+    <number>1</number>
+   </property>
+   <item>
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>500</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="img_label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>1000</width>
+         <height>563</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>500</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QTabWidget" name="tabWidget_2">
+       <property name="minimumSize">
+        <size>
+         <width>310</width>
+         <height>370</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>310</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="pose_tab_2">
+        <attribute name="title">
+         <string>Pose</string>
+        </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>9</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>9</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="txt_rotXZ_2">
+             <property name="minimumSize">
+              <size>
+               <width>209</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Rotar XZ</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="rotar_XZ_2">
+             <property name="minimum">
+              <number>-3141</number>
+             </property>
+             <property name="maximum">
+              <number>3141</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="txt_rotXY_2">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Rotar XY</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="rotar_XY_2">
+             <property name="minimum">
+              <number>-3141</number>
+             </property>
+             <property name="maximum">
+              <number>3141</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="txt_rotYZ_2">
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Rotar YZ</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="rotar_YZ_2">
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>6282</number>
+             </property>
+             <property name="value">
+              <number>3141</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="txt_trasX_2">
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Trasladar X</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="trasladar_X_2">
+             <property name="minimum">
+              <number>-1000</number>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="txt_trasY_2">
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Trasladar Y</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="trasladar_Y_2">
+             <property name="minimum">
+              <number>-1000</number>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="singleStep">
+              <number>0</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="txt_trasZ_2">
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Trasladar Z</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="trasladar_Z_2">
+             <property name="minimum">
+              <number>100</number>
+             </property>
+             <property name="maximum">
+              <number>1500</number>
+             </property>
+             <property name="value">
+              <number>800</number>
+             </property>
+             <property name="sliderPosition">
+              <number>800</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="animation_tab_2">
+        <attribute name="title">
+         <string>Animation</string>
+        </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QComboBox" name="animation_list_2">
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="currentText">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="animation_txt_2">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="animation_slider_2">
+             <property name="minimum">
+              <number>-200</number>
+             </property>
+             <property name="maximum">
+              <number>200</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="animation_checkbox_2">
+             <property name="text">
+              <string>Resaltar vértices</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QPushButton" name="animation_back_2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Anterior</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="animation_next_2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Siguiente</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="shape_tab_2">
+        <attribute name="title">
+         <string>Shape</string>
+        </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QComboBox" name="shape_list_2">
+             <property name="font">
+              <font>
+               <family>Open Sans</family>
+               <pointsize>-1</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="currentText">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="shape_txt_2">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="shape_slider_2">
+             <property name="minimum">
+              <number>-150</number>
+             </property>
+             <property name="maximum">
+              <number>150</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="shape_checkbox_2">
+             <property name="text">
+              <string>Resaltar vértices</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QPushButton" name="shape_back_2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Anterior</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="shape_next_2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Siguiente</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="boton_reset_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>310</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>310</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Open Sans</family>
+         <pointsize>-1</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Reiniciar Modelo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="key_frame_ready_2">
+       <property name="minimumSize">
+        <size>
+         <width>310</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>310</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Open Sans</family>
+         <pointsize>-1</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>LISTO</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

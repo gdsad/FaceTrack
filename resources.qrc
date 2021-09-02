@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file>Montserrat.otf</file>
+        <file>OpenSans.ttf</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>down-arrow.png</file>
+        <file>hamb.png</file>
+        <file>hamb_hover.png</file>
+        <file>hamb_pressed.png</file>
+        <file>up-arrow.png</file>
+        <file>icon.ico</file>
+    </qresource>
+    <qresource prefix="/info">
+        <file>instrucciones.pdf</file>
+    </qresource>
+</RCC>
