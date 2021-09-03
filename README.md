@@ -1,15 +1,22 @@
 # FaceTrack
-FaceTrack: Asymmetric Facial and Gesture Analysis Tool for Speech Language Pathologist Applications
+## FaceTrack: Asymmetric Facial and Gesture Analysis Tool for Speech Language Pathologist Applications
 
-In this paper, a novel tool for facial and gesture analysis aiming to quantify different subjective measures employed in the Speech Language Pathologist area is proposed.
-Through an input video (from a simple monocular camera) showing a person's face, the developed tool can track the movements and expressions from it in order to extract useful morphological and gestural parameters that are of interest in different fields of study, such as, Speech Language Pathologist, Neurology, etc.
-A modified version of a $3D$ face model, named Candide-3, is employed in the tracking stage.
-Since the original $3D$ model cannot handle asymmetrical facial movements, a new set of animation units was implemented in order to effectively track asymmetrical gestures.
-To enhance the tracking accuracy, a fusion scheme is proposed in the facial gesture tracking stage by means of the combination of the $3D$ face model previously described and facial landmarks detected using deep learning models. 
-This tool will be made open source, both the software application (oriented to health professionals, no need to have any programming knowledge), and the source code for the computer vision community.
-Several perceptual experiments were carried out, achieving promising results.
+
+## General Information
+- This project proposes the study, development and implementation of a computer software tool, which, through a video input that show a person's face in the foreground, you can follow the movement and expressions of the same and thus be able to extract a series of parameters that are of interest in different fields of study, such as speech therapy, neurology, among others.
+
+## Aproach
+- For this, advanced digital image processing techniques are combined based on artificial vision and numerical minimization methods. Combining these techniques, facial points of interest were tracked throughout the video and estimation of parameters of the face model used. In this way, it is carried out a tracking of 2D points and they are estimated in a 3D model with the shape of the face of the person under analysis, allowing to obtain quantitative measurements of it. Once processing is completed, the results obtained will be displayed in different interactive graphics and it will be allowed to export them.
+
+- To test the correct operation of the program, several videos were used test in different lighting conditions and environment, in which they were analyzed people with partial facial paralysis and healthy people. It was observed that the program is consisting of the results obtained and that the parameters measured in a person they do not vary from video to video. It should be noted that, in the test videos of people with partial facial paralysis, the results obtained for each side of the face  correspond with their partial facial paralysis. The efficiency of the proposed method was evaluated perceptually.
+
+## Tech Stack
+- It is made in C++, using Qt framework, OpenCV 4.3.0 and ALGlib 3.16.0. 
 
 ## Citation
+This project was initially developed by Facundo Reyes and Julian Alvarez under the supervision of PhD. Gonzalo Sad in Universidad Nacional de Rosario. 
+
+If our code helps your research, please consider citing the following paper:
 ```
 @inproceedings{Sad_Reyes_Alvarez_2021,
   title={FaceTrack: Asymmetric Facial and Gesture Analysis Tool for Speech Language Pathologist Applications},
