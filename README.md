@@ -221,10 +221,12 @@ This is a FaceTrack Installer only for Windows (see the video tutorial [FaceTrac
 ## Citation
 This project was initially developed by Facundo Reyes and Julián Alvarez under the supervision of PhD. Gonzalo Sad in FCEIA, Universidad Nacional de Rosario, Argentina.
 
-If our code helps your research, please consider citing the following paper:
+If our code helps your research, please consider citing the following papers:
 
 ```
 Gonzalo D. Sad, Facundo Reyes, and Julián Alvarez. 2021. FaceTrack: Asymmetric Facial and Gesture Analysis Tool for Speech Language Pathologist Applications. In Proceedings of the 1st Workshop on Facial Micro-Expression: Advanced Techniques for Facial Expressions Generation and Spotting (FME'21). Association for Computing Machinery, New York, USA, 1–10. DOI:https://doi.org/10.1145/3476100.3484460
+
+Gonzalo D. Sad, Facundo Reyes, and Julián Alvarez. 2021. Asymmetric 3D face model for Speech Language Pathologist applications. In Proceedings of the 16th IEEE International Conference on Automatic Face and Gesture Recognition (FG2021), Jodhpur, India.
 ```
 
 
@@ -245,5 +247,16 @@ numpages = {10},
 keywords = {asymmetric 3d face model, face tracking, gesture analysis},
 location = {Virtual Event, China},
 series = {FME'21}
+}
+
+@inproceedings{AsymmFace_2021,
+author = {Sad, Gonzalo D. and Reyes, Facundo and Alvarez, Juli\'{a}n},
+title = {Asymmetric 3D face model for Speech Language Pathologist applications},
+year = {2021},
+booktitle = {Proceedings of the 16th IEEE International Conference on Automatic Face and Gesture Recognition},
+pages = {1–8},
+numpages = {8},
+location = {Jodhpur, India},
+series = {FG2021}
 }
 ```
