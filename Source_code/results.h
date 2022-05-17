@@ -11,7 +11,7 @@
 #include <QTableWidget>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
-#include <MatToQImage.h>
+#include "utils/MatToQImage.h"
 #include <iostream>
 #include <iomanip>
 #include <exception>

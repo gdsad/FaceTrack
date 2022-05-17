@@ -15,8 +15,8 @@
 #include <iostream>
 #include <time.h>
 
-#define OUTPUT_VIDEO_H      563
-#define OUTPUT_VIDEO_W      1000
+#define OUTPUT_VIDEO_H      713
+#define OUTPUT_VIDEO_W      1270
 #define TEMPORARY_LOG   true
 
 class Worker : public QObject

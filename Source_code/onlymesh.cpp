@@ -1,6 +1,6 @@
 #include "onlymesh.h"
 #include "ui_onlymesh.h"
-#include "MatToQImage.h"
+#include "utils/MatToQImage.h"
 #include <iostream>
 #include <fstream>
 #include <QFile>
@@ -12,7 +12,8 @@
 
 OnlyMesh::OnlyMesh(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::OnlyMesh)
+    ui(new Ui::OnlyMesh),
+    candide(nullptr)
 {
     ui->setupUi(this);
     std::cout << "Inicializando OnlyMesh...." << std::endl;
@@ -45,9 +46,6 @@ void OnlyMesh::init(void){
     // Seteo el indice de los tabs para que arranque en el primer Tab
     ui->tabWidget_2->setCurrentIndex(0);
     std::cout<< "----> Seteo posicion inicial del tab en POSE. " << std::endl;
-
-    // Ubico mascara en el centro del espacio de trabajo
-    candide->camera_matrix = (cv::Mat_<double>(3, 3) << 750, 0, 1000/2, 0, 750, 563/2, 0, 0, 1);
 
     // Sombras
     QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect();
@@ -157,9 +155,9 @@ void OnlyMesh::resizeEvent(QResizeEvent *event){
 }
 
 void OnlyMesh::actualizar_posicion(){
-    ui->txt_rotXZ_2->setText("Rotar XZ: " + QString::number(candide->Rvector.at<double>(0, 0)));
+    ui->txt_rotXZ_2->setText("Rotar XZ: " + QString::number(candide->Rvector.at<double>(0, 1)));
     ui->txt_rotXY_2->setText("Rotar XY: " + QString::number(candide->Rvector.at<double>(0, 2)));
-    ui->txt_rotYZ_2->setText("Rotar YZ: " + QString::number(candide->Rvector.at<double>(0, 1)));
+    ui->txt_rotYZ_2->setText("Rotar YZ: " + QString::number(candide->Rvector.at<double>(0, 0)));
     ui->txt_trasX_2->setText("Trasladar X: " + QString::number(candide->Tvector.at<double>(0, 0)));
     ui->txt_trasY_2->setText("Trasladar Y: " + QString::number(-candide->Tvector.at<double>(0, 1)));
     ui->txt_trasZ_2->setText("Trasladar Z: " + QString::number(candide->Tvector.at<double>(0, 2)));
@@ -264,9 +262,9 @@ void OnlyMesh::on_boton_reset_2_clicked(){
     //Reinicio sliders, listas y checkbox
     ui->animation_slider_2->setValue(0);
     ui->shape_slider_2->setValue(0);
-    ui->rotar_XY_2->setValue(0);
+    ui->rotar_XY_2->setValue(3141);
     ui->rotar_XZ_2->setValue(0);
-    ui->rotar_YZ_2->setValue(3141);
+    ui->rotar_YZ_2->setValue(0);
     ui->trasladar_X_2->setValue(0);
     ui->trasladar_Y_2->setValue(0);
     ui->trasladar_Z_2->setValue(800);
@@ -338,9 +336,9 @@ void OnlyMesh::on_load_model_2_clicked()
     std::cout << candide->Rvector << " " << candide->Tvector << std::endl;
     candide->load_person(fileName.toUtf8().constData());
     std::cout << candide->Rvector.at<double>(0,0) << " " << candide->Tvector.at<double>(0,0) << std::endl;
-    ui->rotar_XZ_2->setValue(candide->Rvector.at<double>(0,0)*1000.0);
+    ui->rotar_XZ_2->setValue(candide->Rvector.at<double>(0,1)*1000.0);
     ui->rotar_XY_2->setValue(candide->Rvector.at<double>(0,2)*1000.0);
-    ui->rotar_YZ_2->setValue(candide->Rvector.at<double>(0,1)*1000.0);
+    ui->rotar_YZ_2->setValue(candide->Rvector.at<double>(0,0)*1000.0);
     ui->trasladar_X_2->setValue(candide->Tvector.at<double>(0,0)*100.0);
     ui->trasladar_Y_2->setValue(-candide->Tvector.at<double>(0,1)*100.0);
     ui->trasladar_Z_2->setValue(candide->Tvector.at<double>(0,2)*100.0);

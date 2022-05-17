@@ -1,12 +1,13 @@
+#include <QCoreApplication>
+
 #include "facetracking.h"
 
 facetracking::facetracking(){
-    HC_face.load("haarcascade_frontalface_alt2.xml");
+    HC_face.load((QCoreApplication::applicationDirPath() + "/data/haarcascade_frontalface_alt2.xml").toStdString());
     facemark = cv::face::FacemarkLBF::create();
-    facemark->loadModel("lbfmodel.yaml");
+    facemark->loadModel((QCoreApplication::applicationDirPath() + "/data/lbfmodel.yaml").toStdString());
     termcrit = cv::TermCriteria(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
     winSize = cv::Size(20, 20);
-
 }
 
 cv::Rect facetracking::detectFace(cv::Mat img, bool& face_detected) {
@@ -391,8 +392,7 @@ void facetracking::estimar_animacion(cv::Mat prev_img, cv::Mat img, puntos2d pun
 
     puntos_animation_tracking.reserve(int(candide->vertices2D->size()));
     puntos_animation_tracking_indx.reserve(int(candide->vertices2D->size()));
-    std::vector<int> facemark_indx_candide = { 29,0,0,0,30,0,0,32,10,65,0,0,63,61,0,0,62,15,0,0,0,17,50,0,0,0,48,0,94,0,0,0,111,0,112,0,20,67,71,23,72,68,56,73,69,53,70,74,31,79,33,7,66,80,64,86,0,8,0,85,88,81,87,82,89,84,40,83 };
-
+    std::vector<int> facemark_indx_candide =   { 62 ,0,0,0,63,0,0,65,10,32,0,0,30,28,0,0,29,48,0,0,0,50,17,0,0,0,15,0,94,0,0,0,112,0,111,0,53,69,73,23,74,70,23,71,67,20,68,72,64,80,66,7,33,79,31,85,0,8,0,86,89,82,87,83,88,81,40,84 };
     // Selecciona los puntos para la estimacion de la animacion
     for(int n=0; n< int(candide->vertices2D->size()); n++)
     {
@@ -438,24 +438,24 @@ void facetracking::estimar_animacion(cv::Mat prev_img, cv::Mat img, puntos2d pun
 
             // ==========> Casos particulares
             // Correccion de cejas
-            if (puntos_animation_tracking_indx.at(k) == 16 || puntos_animation_tracking_indx.at(k) == 18) {
+            if (puntos_animation_tracking_indx.at(k) == 49 || puntos_animation_tracking_indx.at(k) == 51) {
                 actual_2D_ok.at(k) = (stabilized_landmarks.at(18).GetPoint() + stabilized_landmarks.at(19).GetPoint()) / 2;
             }
-            if (puntos_animation_tracking_indx.at(k) == 49 || puntos_animation_tracking_indx.at(k) == 51) {
+            if (puntos_animation_tracking_indx.at(k) == 16 || puntos_animation_tracking_indx.at(k) == 18) {
                 actual_2D_ok.at(k) = (stabilized_landmarks.at(24).GetPoint() + stabilized_landmarks.at(25).GetPoint()) / 2;
             }
 
             // Ojos
-            if (puntos_animation_tracking_indx.at(k) == 21) {
+            if (puntos_animation_tracking_indx.at(k) == 54) {
                 actual_2D_ok.at(k) = (stabilized_landmarks.at(37).GetPoint() + stabilized_landmarks.at(38).GetPoint()) / 2;
             }
-            if (puntos_animation_tracking_indx.at(k) == 22) {
+            if (puntos_animation_tracking_indx.at(k) == 55) {
                 actual_2D_ok.at(k) = (stabilized_landmarks.at(40).GetPoint() + stabilized_landmarks.at(41).GetPoint()) / 2;
             }
-            if (puntos_animation_tracking_indx.at(k) == 54) {
+            if (puntos_animation_tracking_indx.at(k) == 21) {
                 actual_2D_ok.at(k) = (stabilized_landmarks.at(43).GetPoint() + stabilized_landmarks.at(44).GetPoint()) / 2;
             }
-            if (puntos_animation_tracking_indx.at(k) == 55) {
+            if (puntos_animation_tracking_indx.at(k) == 22) {
                 actual_2D_ok.at(k) = (stabilized_landmarks.at(46).GetPoint() + stabilized_landmarks.at(47).GetPoint()) / 2;
             }
 

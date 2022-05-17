@@ -1,4 +1,4 @@
-﻿#include "facialmesh.h"
+#include "facialmesh.h"
 #define PI                  3.1415926
 
 facialmesh::facialmesh(string filename) {
@@ -7,20 +7,19 @@ facialmesh::facialmesh(string filename) {
     std::cout << "----> Modelo Cargado" << std::endl;
     // Seteo todos los parametros para utilizar la funcion cv::projectPoints (https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html)
     // Extra: https://docs.opencv.org/2.4/_images/pinhole_camera_model.png
-    float focal_length = 750.0; //1000
+    float focal_length = 1000; //1000
     // El centro en X e Y luego debera ser la nariz del sujeto obtenida utilizando LandMarks
     float centro_x = (320 * RESIZE_FACTOR) / 2;
     float centro_y = (240 * RESIZE_FACTOR) / 2;
     //centro_x = 980 /2;
     //centro_y = 760 /2;
-    centro_x = 1000 / 2;
-    centro_y = 563/2;
+    centro_x = 600;
+    centro_y = 448;
     camera_matrix = (cv::Mat_<double>(3, 3) << focal_length, 0, centro_x, 0, focal_length, centro_y, 0, 0, 1);
     Rvector = cv::Mat::zeros(1, 3, CV_64F);
     Tvector = cv::Mat::zeros(1, 3, CV_64F);
     distCoeffs = cv::Mat::zeros(8, 1, CV_32F);
     Tvector.at<double>(0, 2) = 8.5; //10
-    Rvector.at<double>(0, 1) = PI;
 
     // Proyecta puntos 2D
     actualizar_2D();
@@ -91,12 +90,12 @@ void facialmesh::load_mesh(string filename)
                 // activacion de todas las Units del modelo
                 vertices3D->at(indx).x = str2float(linedata_tmp.at(0)) * RESIZE_FACTOR;
                 vertices3D->at(indx).y = -str2float(linedata_tmp.at(1)) * RESIZE_FACTOR;
-                vertices3D->at(indx).z = str2float(linedata_tmp.at(2)) * RESIZE_FACTOR;
+                vertices3D->at(indx).z = -str2float(linedata_tmp.at(2)) * RESIZE_FACTOR;
 
                 // La ubicacion de estos vertices son fijas en el tiempo
                 vertices3D_original->at(indx).x = str2float(linedata_tmp.at(0)) * RESIZE_FACTOR;
                 vertices3D_original->at(indx).y = -str2float(linedata_tmp.at(1)) * RESIZE_FACTOR;
-                vertices3D_original->at(indx).z = str2float(linedata_tmp.at(2)) * RESIZE_FACTOR;
+                vertices3D_original->at(indx).z = -str2float(linedata_tmp.at(2)) * RESIZE_FACTOR;
 
                 // Inicializo el vector con la clase de todos los vertices
                 vertex_class.push_back(CLASE_NULL);
@@ -156,16 +155,16 @@ void facialmesh::load_mesh(string filename)
               ============================================================================================== */
 
         if (string::npos != line.find("# ANIMATION UNITS LIST:")) {
-            //std::printf("\n%s", line.c_str());
+            std::printf("\n%s", line.c_str());
 
             // Lee la l�nea siguiente con la cantidad de Animation Units disponibles
             std::getline(file, line);
             int cant_anim_units = atoi(line.c_str());
-            //std::printf("%d", cant_anim_units);
+            std::printf("%d", cant_anim_units);
 
-            animation_parameters.reserve((cant_anim_units) * 2);
-            animation_coef.reserve((cant_anim_units) * 2);
-            animation_coef_k.reserve((cant_anim_units) * 2);
+            animation_parameters.reserve((cant_anim_units));
+            animation_coef.reserve((cant_anim_units));
+            animation_coef_k.reserve((cant_anim_units));
             // Leo todas las AUV disponibles segun lo indicado con cant_anim_units
             for (int k = 0; k < cant_anim_units; k++) {
 
@@ -174,11 +173,11 @@ void facialmesh::load_mesh(string filename)
 
                 if (string::npos != line.find("# ")) {
                     // Para los units que no deben ser asimetricos
-                    if (string::npos != line.find("Jaw")) {
+                    if (true) {
 
                         unit simetrical_unit;
                         line = line.substr(2); //Le quito los dos primeros elementos al nombre (# )
-                        simetrical_unit.name = _strdup(line.c_str());
+                        simetrical_unit.name = strdup(line.c_str());
                         std::getline(file, line);
                         int cant_de_renglones = atoi(line.c_str());
                         simetrical_unit.matriz.reserve(cant_de_renglones);
@@ -193,8 +192,8 @@ void facialmesh::load_mesh(string filename)
                             split_line(line, ' ', linedata_tmp);
                             simetrical_unit.matriz.push_back(renglon_matriz(str2float(linedata_tmp.at(0)),
                                 str2float(linedata_tmp.at(1)),
-                                str2float(linedata_tmp.at(2)),
-                                str2float(linedata_tmp.at(3))));
+                                -str2float(linedata_tmp.at(2)),
+                                -str2float(linedata_tmp.at(3))));
                             vertex_class[str2float(linedata_tmp.at(0))] = CLASE_ANIMATION;
                         }
                         animation_parameters.push_back(simetrical_unit);
@@ -213,9 +212,9 @@ void facialmesh::load_mesh(string filename)
                         int cant_de_renglones = atoi(line.c_str());
                         unit izquierda, derecha;
                         string aux = auv_name + " R";
-                        izquierda.name = _strdup(aux.c_str());
+                        izquierda.name = strdup(aux.c_str());
                         aux = auv_name + " L";
-                        derecha.name = _strdup(aux.c_str());
+                        derecha.name = strdup(aux.c_str());
                         aux.clear();
 
                         izquierda.matriz.reserve(cant_de_renglones);
@@ -233,14 +232,14 @@ void facialmesh::load_mesh(string filename)
                             if (vertices3D->at(str2float(linedata_tmp.at(0))).x >= 0) {
                                 izquierda.matriz.push_back(renglon_matriz(str2float(linedata_tmp.at(0)),
                                     str2float(linedata_tmp.at(1)),
-                                    str2float(linedata_tmp.at(2)),
-                                    str2float(linedata_tmp.at(3))));
+                                    -str2float(linedata_tmp.at(2)),
+                                    -str2float(linedata_tmp.at(3))));
                             }
                             if (vertices3D->at(str2float(linedata_tmp.at(0))).x <= 0) {
                                 derecha.matriz.push_back(renglon_matriz(str2float(linedata_tmp.at(0)),
                                     str2float(linedata_tmp.at(1)),
-                                    str2float(linedata_tmp.at(2)),
-                                    str2float(linedata_tmp.at(3))));
+                                    -str2float(linedata_tmp.at(2)),
+                                    -str2float(linedata_tmp.at(3))));
                             }
                             if (vertices3D->at(str2float(linedata_tmp.at(0))).x == 0) {
                                 //std::printf(" ---> Punto Central, %f", str2float(linedata_tmp.at(1)));
@@ -293,7 +292,7 @@ void facialmesh::load_mesh(string filename)
                 if (string::npos != line.find("# ")) {
                     unit shape;
                     line = line.substr(2);
-                    shape.name = _strdup(line.c_str());
+                    shape.name = strdup(line.c_str());
                     std::getline(file, line);
                     int cant_de_renglones = atoi(line.c_str());
 
@@ -307,8 +306,8 @@ void facialmesh::load_mesh(string filename)
                         split_line(line, ' ', linedata_tmp);
                         shape.matriz.push_back(renglon_matriz(str2float(linedata_tmp.at(0)),
                             str2float(linedata_tmp.at(1)),
-                            str2float(linedata_tmp.at(2)),
-                            str2float(linedata_tmp.at(3))));
+                            -str2float(linedata_tmp.at(2)),
+                            -str2float(linedata_tmp.at(3))));
                     }
                     shape_parameters.push_back(shape);
                 }
@@ -390,7 +389,9 @@ float facialmesh::str2float(string s)
     if (found != std::string::npos)
         s[found] = '.'; // Change ',' to '.'
 
-    return std::atof(s.c_str());
+    float result = std::atof(s.c_str());
+    std::cout << "Converted " << s << " to " << result << std::endl;
+    return result;
 }
 
 void facialmesh::leer_parametros(vector<vector<float> >* param, ifstream& file)
@@ -415,8 +416,8 @@ void facialmesh::leer_parametros(vector<vector<float> >* param, ifstream& file)
 void  facialmesh::rotartrasladar(double ang_xz, double ang_xy, double ang_yz, double d_x, double d_y, double d_z)
 {
     // Rotacion
-    Rvector.at<double>(0, 0) = ang_xz;
-    Rvector.at<double>(0, 1) = ang_yz;
+    Rvector.at<double>(0, 0) = ang_yz;
+    Rvector.at<double>(0, 1) = ang_xz;
     Rvector.at<double>(0, 2) = ang_xy;
     // Traslacion
     Tvector.at<double>(0, 0) = d_x;
@@ -427,9 +428,9 @@ void  facialmesh::rotartrasladar(double ang_xz, double ang_xy, double ang_yz, do
 
 void  facialmesh::rotar(double ang_xz, double ang_xy, double ang_yz)
 {
-    Rvector.at<double>(0, 0) = ang_xz;
-    Rvector.at<double>(0, 1) = ang_xy;
-    Rvector.at<double>(0, 2) = ang_yz;
+    Rvector.at<double>(0, 0) = ang_yz;
+    Rvector.at<double>(0, 1) = ang_xz;
+    Rvector.at<double>(0, 2) = ang_xy;
     actualizar_2D();
 }
 void  facialmesh::trasladar(double d_x, double d_y, double d_z)
@@ -447,9 +448,9 @@ void facialmesh::set_animation_value(int AUV, float value)
         float central_point = 1.0;
         for (int k = 0; k < int(animation_parameters[AUV].matriz.size()); k++)
         {
-            if (vertex_class[animation_parameters[AUV].matriz.at(k).i] == CLASE_ANIMATION_CENTRAL) central_point = 0.5;
+            if (vertex_class[animation_parameters[AUV].matriz.at(k).i] == CLASE_ANIMATION_CENTRAL) central_point = 1;
             animation3D->at(animation_parameters[AUV].matriz.at(k).i).x += value * animation_parameters[AUV].matriz.at(k).coef_xyz.x * central_point;
-            animation3D->at(animation_parameters[AUV].matriz.at(k).i).y += value * (-animation_parameters[AUV].matriz.at(k).coef_xyz.y) * central_point;
+            animation3D->at(animation_parameters[AUV].matriz.at(k).i).y += value * (animation_parameters[AUV].matriz.at(k).coef_xyz.y) * central_point;
             animation3D->at(animation_parameters[AUV].matriz.at(k).i).z += value * animation_parameters[AUV].matriz.at(k).coef_xyz.z * central_point;
             central_point = 1.0;
         }
@@ -463,7 +464,7 @@ void facialmesh::set_shape_value(int SHAPE, float value)
         for (int k = 0; k < int(shape_parameters[SHAPE].matriz.size()); k++)
         {
             shape3D->at(shape_parameters[SHAPE].matriz.at(k).i).x += value * shape_parameters[SHAPE].matriz.at(k).coef_xyz.x;
-            shape3D->at(shape_parameters[SHAPE].matriz.at(k).i).y += value * (-shape_parameters[SHAPE].matriz.at(k).coef_xyz.y);
+            shape3D->at(shape_parameters[SHAPE].matriz.at(k).i).y += value * (shape_parameters[SHAPE].matriz.at(k).coef_xyz.y);
             shape3D->at(shape_parameters[SHAPE].matriz.at(k).i).z += value * shape_parameters[SHAPE].matriz.at(k).coef_xyz.z;
         }
     }
@@ -504,10 +505,44 @@ void facialmesh::actualizar_vertices()
     actualizar_2D();
 }
 
+void project(puntos3d* input, cv::Mat r_vector, cv::Mat t_vector, cv::Mat camera_matrix, puntos2d* output)
+{
+    if (t_vector.cols == 3) {
+        t_vector = t_vector.t();
+    }
+    output->resize(0);
+
+    // Transform rotation vector to rotation matrix.
+    cv::Mat r_mat = cv::Mat::zeros(3, 3, CV_64F);
+    Rodrigues(r_vector.t(), r_mat);
+
+    // Concatenate rotation matrix and translation vector to form a 3D transformation matrix.
+    cv::Mat transformation_matrix;
+    cv::hconcat(r_mat, t_vector, transformation_matrix);
+
+    // Compute the projection matrix.
+    cv::Mat projection_matrix = camera_matrix * transformation_matrix;
+    for (auto p : *input)
+    {
+        // Point to column matrix in homogeneous coordinates.
+        cv::Mat p_col=cv::Mat(p).reshape(1);
+        p_col.convertTo(p_col,CV_64F);
+        cv::vconcat(p_col, cv::Mat::ones(1,1,CV_64F), p_col);
+
+        // Project.
+        cv::Mat result = projection_matrix * p_col;
+
+        // Append to output vector.
+        output->push_back(punto2d(result.at<double>(0,0) / result.at<double>(2,0), result.at<double>(1,0) / result.at<double>(2,0)));
+    }
+}
+
 void facialmesh::actualizar_2D()
 {
-    projectPoints(*vertices3D, Rvector, Tvector, camera_matrix, distCoeffs, *vertices2D);
-    projectPoints(*vertices3D_noanimation, Rvector, Tvector, camera_matrix, distCoeffs, *vertices2D_noanimation);
+    project(vertices3D, Rvector, Tvector, camera_matrix, vertices2D);
+    project(vertices3D_noanimation, Rvector, Tvector, camera_matrix, vertices2D_noanimation);
+    // projectPoints(*vertices3D, Rvector, Tvector, camera_matrix, distCoeffs, *vertices2D);
+    // projectPoints(*vertices3D_noanimation, Rvector, Tvector, camera_matrix, distCoeffs, *vertices2D_noanimation);
 }
 
 void facialmesh::actualizar_modelo()
@@ -535,7 +570,7 @@ void facialmesh::resetear_shape()
 
 void facialmesh::resetear_pose()
 {
-    rotartrasladar(0, 0, PI, 0, 0, 8);
+    rotartrasladar(0, 0, 0, 0, 0, 8);
 }
 
 void facialmesh::resetear_modelo()
@@ -548,6 +583,7 @@ void facialmesh::resetear_modelo()
 cv::Mat facialmesh::graficar_mesh(cv::Mat img)
 {
     cv::Mat imagen = img.clone();
+    std::cout << imagen.size << std::endl;
     for (int k = 0; k < int(faces.size()); k++)
     {
         cv::line(imagen, vertices2D->at(faces[k].a), vertices2D->at(faces[k].b), COLOR_AZUL);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author>ALVAREZ, Julian - REYES, Facundo</author>
+ <author>Desarrollado por Gonzalo Sad, Matías Moreyra, Facundo Reyes y Julián Álvarez</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="enabled">
@@ -1043,7 +1043,7 @@ padding-right: 30px;
 padding-left: 30px;</string>
                      </property>
                      <property name="text">
-                      <string>Desarrollado por Julián ALVAREZ y Facundo REYES bajo la dirección del Dr. Gonzalo SAD.</string>
+                      <string>Desarrollado por Gonzalo Sad, Matías Moreyra, Facundo Reyes y Julián Álvarez</string>
                      </property>
                      <property name="textFormat">
                       <enum>Qt::PlainText</enum>
@@ -1162,7 +1162,7 @@ padding-left: 30px;</string>
                 <enum>QFrame::NoFrame</enum>
                </property>
                <property name="text">
-                <string>ALVAREZ, Julian - REYES, Facundo</string>
+                <string>Desarrollado por Gonzalo Sad, Matías Moreyra, Facundo Reyes y Julián Álvarez</string>
                </property>
               </widget>
              </item>

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <QFileDialog>
-#include "MatToQImage.h"
+#include "utils/MatToQImage.h"
 #include <QGraphicsDropShadowEffect>
 
 KeyFrameSelection::KeyFrameSelection(QWidget *parent) :
@@ -67,7 +67,7 @@ void KeyFrameSelection::actualizar_frame()
         cap.read(frame);
         ui->txt_frame_actual->setText(QString::number(frame_number));
     }
-    frame = GetFittedImage(frame,563,1000);
+    frame = GetFittedImage(frame,713,1270);
     //QImage imgQ = MatToQImage(GetFittedImage(frame,ui->img_label->height(),ui->img_label->width()));
     QImage imgQ = MatToQImage(frame);
     ui->img_label->setPixmap(QPixmap::fromImage(imgQ).scaled(ui->img_label->width(), ui->img_label->width()*0.5625));
@@ -114,7 +114,7 @@ void KeyFrameSelection::on_open_video_clicked()
     cap.read(frame);
 
     ui->img_label->setMinimumHeight(int(ui->img_label->width()*0.5625) );
-    frame = GetFittedImage(frame,563,1000);
+    frame = GetFittedImage(frame, 713, 1270);
     QImage imgQ = MatToQImage(frame);
     ui->img_label->setPixmap(QPixmap::fromImage(imgQ).scaled(ui->img_label->width(),ui->img_label->height()));
     filename = fileName.toStdString();
@@ -171,7 +171,7 @@ void KeyFrameSelection::on_convertir_clicked()
 
 void KeyFrameSelection::on_select_keyframe_clicked()
 {
-    frame = GetFittedImage(frame, 563,1000);
+    frame = GetFittedImage(frame, 713,1270);
     emit keyframe_selected();
     //cap.release();
 }

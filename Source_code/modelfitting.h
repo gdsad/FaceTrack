@@ -40,12 +40,15 @@ private slots:
     void on_save_model_clicked();
     void on_load_model_clicked();
     void on_key_frame_ready_clicked();
+    void on_btn_automatic_fit_clicked();
     void resizeEvent(QResizeEvent *event);
 
 signals:
     void keyframe_ready();
 
 private:
+    void load_model(QString fileName);
+
     Ui::ModelFitting *ui;
 };
 

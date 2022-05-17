@@ -16,7 +16,7 @@
 #include <opencv2/calib3d/calib3d.hpp>		// vision multiple, como camaras estereo, correspondencia o reconstruccion 3D
 
 #define GET_VARIABLE_NAME(variable)       (#variable)
-#define RESIZE_FACTOR                       3
+#define RESIZE_FACTOR                       1
 //                                          Scalar((b), (g), (r), 0)
 #define COLOR_ROJO                          cv::Scalar((0), (0), (255), 0)
 #define COLOR_AZUL                          cv::Scalar((255), (0), (0), 0)

@@ -203,20 +203,37 @@ Facial gestures are a combination of different facial movements, and therefore t
 ## How to use?
 
 ### Compile
-The source code (C++) of FaceTrack is in the folder `FaceTrack/Source_code`.
-It was developed using Qt framework (v4.11.2), so you must to have Qt installed in your PC.
-Two external libraries were employed:
 
-* OpenCv &#8594; OpenCV 4.3.0
+#### Requirements:
+* OpenCv &#8594; OpenCV 4.3.0.
 * ALGlib &#8594; ALGlib 3.16.0.
+* Qt &#8594; Qt 4.1.2.
 
-In order to compile the FaceTrack source code with Qt, first you have to download and compile this two libraries.
+If you want to use automatic mask fitting, you'll also need Python (>= 3.8.10), and some extra dependencies that can be installed via `pip`:
 
-Keep in mind that you must then configure the directories of these libraries in the configuration file `FaceTrack/Source_code/InterfazCandide.pro`, so Qt can find these libraries.
+```
+pip install tensorflow dlib opencv-python
+```
+
+#### On Linux:
+The `Source_code/` directory contains two convenient scripts for building and running the project:
+  - Build:
+```
+./build.sh
+```
+  - Run:
+```
+./run.sh
+```
+
+#### On Windows (WIP):
+In progress.
 
 ### Install
 If you only want to use the program (you do not want to compile it from source), you can use the installer located in `FaceTrack/Installers/setup.exe`. Just double click and the installer will install the program.
 This is a FaceTrack Installer only for Windows (see the video tutorial [FaceTrack_installation.mkv](Video_tutorials/FaceTrack_installation.mkv) for detailed instructions).
+
+**Disclaimer: the latest released installer does not contain support for automatic mask fitting, you need to build from sources in order to use that feature.**
 
 ## Citation
 This project was initially developed by Facundo Reyes and Julián Alvarez under the supervision of PhD. Gonzalo Sad in FCEIA, Universidad Nacional de Rosario, Argentina.

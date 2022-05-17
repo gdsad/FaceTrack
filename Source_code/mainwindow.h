@@ -14,8 +14,8 @@
 #include "facialmesh.h"
 #include "facetracking.h"
 
-// Archivo con mascara Candide
-#define CANDIDE_MODEL       "candide3_v3.wfm"
+// Candide model file path, relative to application directory.
+#define CANDIDE_MODEL "data/candide3_v3.wfm"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -8,6 +8,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
+    // Set locale to en_US to use "." as the decimal separator.
+    setlocale(LC_ALL, "en_US.UTF-8");
+
     // Agrego Fuentes Utilizadas   
     QFontDatabase::addApplicationFont(":/fonts/OpenSans.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Montserrat.otf");

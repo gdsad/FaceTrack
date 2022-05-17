@@ -1,6 +1,6 @@
 #include "trackingvideo.h"
 #include "ui_trackingvideo.h"
-#include "MatToQImage.h"
+#include "utils/MatToQImage.h"
 #include "facetracking.h"
 #include "QProgressBar"
 #include <QGraphicsDropShadowEffect>

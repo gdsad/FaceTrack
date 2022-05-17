@@ -1,18 +1,21 @@
 #include "modelfitting.h"
 #include "ui_modelfitting.h"
-#include "MatToQImage.h"
+#include "utils/MatToQImage.h"
 #include <iostream>
 #include <fstream>
+#include <QMessageBox>
 #include <QFile>
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QGraphicsDropShadowEffect>
+#include <QProgressDialog>
 
 #include "facialmesh.h"
 
 ModelFitting::ModelFitting(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ModelFitting)
+    ui(new Ui::ModelFitting),
+    candide(nullptr)
 {
     ui->setupUi(this);
     std::cout << "Inicializando ModelFitting...." << std::endl;
@@ -43,9 +46,6 @@ void ModelFitting::init(void){
     // Seteo el indice de los tabs para que arranque en el primer Tab
     ui->tabWidget->setCurrentIndex(0);
     std::cout<< "----> Seteo posicion inicial del tab en POSE. " << std::endl;
-
-    // Ubico mascara en el centro del espacio de trabajo
-    candide->camera_matrix = (cv::Mat_<double>(3, 3) << 750, 0, 1000/2, 0, 750, 563/2, 0, 0, 1);
 
     // Sombras
     QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect();
@@ -157,9 +157,9 @@ void ModelFitting::resizeEvent(QResizeEvent *event){
 
 
 void ModelFitting::actualizar_posicion(){
-    ui->txt_rotXZ->setText("Rotar XZ: " + QString::number(candide->Rvector.at<double>(0, 0)));
+    ui->txt_rotXZ->setText("Rotar XZ: " + QString::number(candide->Rvector.at<double>(0, 1)));
     ui->txt_rotXY->setText("Rotar XY: " + QString::number(candide->Rvector.at<double>(0, 2)));
-    ui->txt_rotYZ->setText("Rotar YZ: " + QString::number(candide->Rvector.at<double>(0, 1)));
+    ui->txt_rotYZ->setText("Rotar YZ: " + QString::number(candide->Rvector.at<double>(0, 0)));
     ui->txt_trasX->setText("Trasladar X: " + QString::number(candide->Tvector.at<double>(0, 0)));
     ui->txt_trasY->setText("Trasladar Y: " + QString::number(-candide->Tvector.at<double>(0, 1)));
     ui->txt_trasZ->setText("Trasladar Z: " + QString::number(candide->Tvector.at<double>(0, 2)));
@@ -266,7 +266,7 @@ void ModelFitting::on_boton_reset_clicked(){
     ui->shape_slider->setValue(0);
     ui->rotar_XY->setValue(0);
     ui->rotar_XZ->setValue(0);
-    ui->rotar_YZ->setValue(3141);
+    ui->rotar_YZ->setValue(0);
     ui->trasladar_X->setValue(0);
     ui->trasladar_Y->setValue(0);
     ui->trasladar_Z->setValue(800);
@@ -333,14 +333,20 @@ void ModelFitting::on_load_model_clicked()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Abrir Shape"), shape_dir, tr("Shape File (*.shape)"));
     if(fileName == NULL)
         return;
+
+    load_model(fileName);
+}
+
+void ModelFitting::load_model(QString fileName)
+{
     desconectar();
     std::cout << "Se cargara el archivo de Shape: " << fileName.toUtf8().constData() << std::endl;
     std::cout << candide->Rvector << " " << candide->Tvector << std::endl;
     candide->load_person(fileName.toUtf8().constData());
     std::cout << candide->Rvector.at<double>(0,0) << " " << candide->Tvector.at<double>(0,0) << std::endl;
-    ui->rotar_XZ->setValue(candide->Rvector.at<double>(0,0)*1000.0);
+    ui->rotar_XZ->setValue(candide->Rvector.at<double>(0,1)*1000.0);
     ui->rotar_XY->setValue(candide->Rvector.at<double>(0,2)*1000.0);
-    ui->rotar_YZ->setValue(candide->Rvector.at<double>(0,1)*1000.0);
+    ui->rotar_YZ->setValue(candide->Rvector.at<double>(0,0)*1000.0);
     ui->trasladar_X->setValue(candide->Tvector.at<double>(0,0)*100.0);
     ui->trasladar_Y->setValue(-candide->Tvector.at<double>(0,1)*100.0);
     ui->trasladar_Z->setValue(candide->Tvector.at<double>(0,2)*100.0);
@@ -352,7 +358,6 @@ void ModelFitting::on_load_model_clicked()
     else imagen = candide->graficar_mesh(kf_image);
     QImage imgQ = MatToQImage(imagen);
     ui->img_label->setPixmap(QPixmap::fromImage(imgQ).scaled(ui->img_label->width(),ui->img_label->width()*0.5625));
-
 }
 
 void ModelFitting::on_key_frame_ready_clicked()
@@ -360,4 +365,47 @@ void ModelFitting::on_key_frame_ready_clicked()
     candide->set_keyframe_image(candide->get_keyframe());
     candide->set_keyframe_model();
     emit keyframe_ready();
+}
+
+
+void ModelFitting::on_btn_automatic_fit_clicked()
+{
+    std::cout << "Ajustando máscara" << std::endl;
+    // Exportar frame actual.
+    cv::Mat keyframe = candide->initial_keyframe;
+
+    QString keyframe_path = "./candide-fit/temp-keyframe.png";
+    cv::imwrite(keyframe_path.toStdString(), GetFittedImage(keyframe, 713, 1270));
+
+    QString candide_fit_path = "python3";
+    QStringList arguments;
+    arguments << QCoreApplication::applicationDirPath() + "/candide-fit/src/fit_candide.py" << "--image" << keyframe_path;
+
+    std::cout << "Fitting candide model..." << std::endl;
+
+    QProcess *myProcess = new QProcess();
+
+    QProgressDialog *dialog = new QProgressDialog("Ajustando modelo...", QString(), 0, 0);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    connect(myProcess, SIGNAL(finished(int)), dialog, SLOT(close()));
+
+    myProcess->start(candide_fit_path, arguments);
+    dialog->exec();
+
+    std::cout << QString(myProcess->readAllStandardOutput()).toStdString() << std::endl;
+
+    QString OUTPUT_PATH = "./output.shape";
+
+    QFileInfo check_file(OUTPUT_PATH);
+    // check if file exists and if yes: Is it really a file and no directory?
+    if (check_file.exists() && check_file.isFile()) {
+        std::cout << "Done fitting candide model..." << std::endl;
+        load_model("./output.shape");
+    } else {
+        QMessageBox msgBox;
+        msgBox.setText("An error ocurrer while trying to fit the candide model.");
+        msgBox.setInformativeText("Make sure you installed the required dependencies.");
+        msgBox.exec();
+    }
 }
